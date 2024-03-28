@@ -23,11 +23,14 @@ export default function App() {
             Alert.alert('Erro', 'Por favor, selecione uma categoria para o filme');
             return;
         }
+
+        const dataAtual = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
         db.transaction(
             tx => {
                 tx.executeSql(
-                    'INSERT INTO filmes (nome_filme, genero, classificacao, data_cad) VALUES (?, ?, ?, datetime("now")) ',
-                    [filme, categoria, clas],
+                    'INSERT INTO filmes (nome_filme, genero, classificacao, data_cad) VALUES (?, ?, ?, ?)',
+                    [filme, categoria, clas, dataAtual],
                     (_, { rowsAffected }) => {
                         console.log(rowsAffected);
                         setFilme('');
@@ -46,7 +49,7 @@ export default function App() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Cadastre aqui o seu lindo filme</Text>
-            
+
             <TextInput
                 style={styles.input}
                 value={filme}
