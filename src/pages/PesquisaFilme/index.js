@@ -28,7 +28,7 @@ export default function App() {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Entre com o nome do filme ou ID"
+        placeholder="Entre com o nome do filme ou categoria"
         value={input}
         onChangeText={setInput}
       />
