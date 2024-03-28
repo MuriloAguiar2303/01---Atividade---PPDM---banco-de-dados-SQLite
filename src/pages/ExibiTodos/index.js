@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, TextInput, Modal, Button } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, Modal, Button, TextInput} from 'react-native';
 import { DatabaseConnection } from '../../database/database'
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-
+import { Picker } from '@react-native-picker/picker';
 
 export default function App() {
     const db = new DatabaseConnection.getConnection;
     const [todos, setTodos] = useState([]);
-    const [filme, setFilme] = useState('')
-    const [genero, setGenero] = useState('')
-    const [clas, setClas] = useState('')
-    const [id, setId] = useState('')
+    const [filme, setFilme] = useState('');
+    const [genero, setGenero] = useState('');
+    const [clas, setClas] = useState('');
+    const [id, setId] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -90,9 +90,6 @@ export default function App() {
         );
     };
 
-
-
-
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -151,18 +148,32 @@ export default function App() {
                             onChangeText={setFilme}
                             placeholder="Nome do Filme"
                         />
-                        <TextInput
-                            style={styles.input}
-                            value={clas}
-                            onChangeText={setClas}
-                            placeholder="Nome do Filme"
-                        />
-                        <TextInput
-                            style={styles.input}
-                            value={genero}
-                            onChangeText={setGenero}
-                            placeholder="Nome do Filme"
-                        />
+                        <Picker
+                            selectedValue={genero}
+                            style={styles.picker}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setGenero(itemValue)
+                            }>
+                            <Picker.Item label="Selecione o Gênero" value="" />
+                            <Picker.Item label="Ação" value="Ação" />
+                            <Picker.Item label="Comédia" value="Comédia" />
+                            <Picker.Item label="Drama" value="Drama" />
+                            <Picker.Item label="Terror" value="Terror" />
+                        </Picker>
+                        <Picker
+                            selectedValue={clas}
+                            style={styles.picker}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setClas(itemValue)
+                            }>
+                            <Picker.Item label="Selecione a Classificação" value="" />
+                            <Picker.Item label="Livre" value="Livre" />
+                            <Picker.Item label="10 anos" value="10 anos" />
+                            <Picker.Item label="12 anos" value="12 anos" />
+                            <Picker.Item label="14 anos" value="14 anos" />
+                            <Picker.Item label="16 anos" value="16 anos" />
+                            <Picker.Item label="18 anos" value="18 anos" />
+                        </Picker>
                         <View  style={styles.saveButton}>
                             <Button title="Salvar" onPress={() => {
                                 salvarEdicao()
@@ -238,6 +249,16 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
     },
+    picker: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 20,
+        width: '100%',
+        backgroundColor: '#333',
+        color: '#fff',
+    },
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -245,6 +266,8 @@ const styles = StyleSheet.create({
         width: '50%',
     },
     saveButton: {
-        gap: 10
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
     },
 });
