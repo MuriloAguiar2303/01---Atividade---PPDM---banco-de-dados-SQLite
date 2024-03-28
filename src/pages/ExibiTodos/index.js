@@ -34,9 +34,6 @@ export default function App() {
         }
     };
 
-    const handleButtonPress = (nomeFilm) => {
-        setFilme(nomeFilm);
-    };
 
 
 
@@ -69,6 +66,30 @@ export default function App() {
         setClas(clas);
         setModalVisible(true);
     };
+    const salvarEdicao = () => {
+        db.transaction(
+          tx => {
+            tx.executeSql(
+              'UPDATE filmes SET nome_filme = ?, classificacao = ?, genero = ? WHERE id = ?',
+              [filme, clas, genero, id],
+              (_, { rowsAffected }) => {
+                if (rowsAffected > 0) {
+                  atualizaRegistros();
+                  setModalVisible(false)
+                  Alert.alert('Sucesso', 'Filme editado com sucesso');
+                } else {
+                  Alert.alert('Erro', 'O filme que está sendo editado não foi encontrado');
+                }
+              },
+              (_, error) => {
+                console.error('Erro ao editar o filme:', error);
+                Alert.alert('Erro', 'Ocorreu um erro ao editar o filme');
+              }
+            );
+          }
+        );
+      };
+      
 
 
 
@@ -113,6 +134,7 @@ export default function App() {
                                 onRequestClose={() => {
                                     setModalVisible(!modalVisible);
                                 }}
+                                // A propriedade onRequestClose do componente Modal do React Native é usada para especificar uma função que será chamada quando o usuário tentar fechar o modal, geralmente através do botão "Voltar" no Android ou ao tocar fora do modal.
                             >
                                 <View style={styles.modalContainer}>
                                     <View style={styles.modalContent}>
@@ -136,7 +158,7 @@ export default function App() {
                                             placeholder="Nome do Filme"
                                         />
                                         <Button title="Salvar" onPress={() => {
-                                            // Função para salvar as alterações no filme
+                                            salvarEdicao()
                                             setModalVisible(false);
                                         }} />
                                         <Button title="Cancelar" onPress={() => setModalVisible(false)} />
@@ -165,10 +187,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)', // Fundo escuro semi-transparente
+        backgroundColor: 'rgba(0, 0, 0, 0.2)', 
     },
     modalContent: {
-        backgroundColor: '#fff', // Fundo branco
+        backgroundColor: '#f9f9f9', 
         borderRadius: 10,
         padding: 20,
         width: '80%',
