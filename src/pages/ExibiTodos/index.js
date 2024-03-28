@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, Modal, Button, TextInput} from 'react-native';
 import { DatabaseConnection } from '../../database/database'
-import { getStatusBarHeight } from 'react-native-status-bar-height';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { Picker } from '@react-native-picker/picker';
 
@@ -163,7 +162,7 @@ export default function App() {
                         <Picker
                             selectedValue={clas}
                             style={styles.picker}
-                            onValueChange={(itemValue) =>
+                            onValueChange={(itemValue, itemIndex) =>
                                 setClas(itemValue)
                             }>
                             <Picker.Item label="Selecione a Classificação" value="" />

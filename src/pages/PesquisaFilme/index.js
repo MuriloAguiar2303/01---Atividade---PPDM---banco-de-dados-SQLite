@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, TextInput, Button, Text, Alert } from 'react-native';
-import { DatabaseConnection } from '../../database/database'
+import { DatabaseConnection } from '../../database/database';
 
 export default function App() {
-  const db = new DatabaseConnection.getConnection;
-  const [input, setInput] = useState('')
-  const [resultado, setResultado] = useState([])
+  const [input, setInput] = useState('');
+  const [resultado, setResultado] = useState([]);
 
   const procurarFilme = () => {
     if (input.trim() === '' || input === null) {
       Alert.alert('Erro', 'Se você não digitar nada, não tem como procurar o filme.');
       return;
     }
+    const db = DatabaseConnection.getConnection();
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM filmes WHERE genero LIKE ? OR nome_filme LIKE ?',
@@ -28,7 +28,7 @@ export default function App() {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Entre com o nome do filme ou categoria"
+        placeholder="Entre com o nome do filme ou ID"
         value={input}
         onChangeText={setInput}
       />

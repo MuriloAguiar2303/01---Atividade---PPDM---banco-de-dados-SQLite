@@ -3,14 +3,15 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Alert, TextInput, Button } from 'react-native';
 import { DatabaseConnection } from '../../database/database';
 import { Picker } from '@react-native-picker/picker';
+import { salvaFilme } from '../../database/database'
+
 
 export default function App() {
-    const db = new DatabaseConnection.getConnection;
     const [filme, setFilme] = useState('');
     const [clas, setClas] = useState('');
     const [categoria, setCate] = useState('');
 
-    const salvaFilme = () => {
+    const handleSalvaFilme = () => {
         if (filme.trim() === '' || filme === null) {
             Alert.alert('Erro', 'Por favor, insira um texto válido para adicionar o nome do filme');
             return;
@@ -24,27 +25,11 @@ export default function App() {
             return;
         }
 
-        const dataAtual = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-
-        db.transaction(
-            tx => {
-                tx.executeSql(
-                    'INSERT INTO filmes (nome_filme, genero, classificacao, data_cad) VALUES (?, ?, ?, ?)',
-                    [filme, categoria, clas, dataAtual],
-                    (_, { rowsAffected }) => {
-                        console.log(rowsAffected);
-                        setFilme('');
-                        setCate('');
-                        setClas('');
-                    },
-                    (_, error) => {
-                        console.error('Erro ao adicionar o filme:', error);
-                        Alert.alert('Erro', 'Ocorreu um erro ao adicionar o filme.');
-                    }
-                );
-            }
-        );
-    }
+        salvaFilme(filme, categoria, clas);
+        setFilme('');
+        setCate('');
+        setClas('');
+    };
 
     return (
         <View style={styles.container}>
@@ -83,7 +68,7 @@ export default function App() {
                 <Picker.Item label="18 anos" value="18 anos" />
             </Picker>
 
-            <Button title="Adicionar" onPress={salvaFilme} />
+            <Button title="Adicionar" onPress={handleSalvaFilme} />
 
             <StatusBar style="auto" />
         </View>
