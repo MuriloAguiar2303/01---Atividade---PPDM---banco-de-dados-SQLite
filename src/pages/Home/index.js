@@ -1,8 +1,8 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DatabaseConnection } from '../../database/database'
+import { DatabaseConnection } from '../../database/database';
 import { useNavigation } from "@react-navigation/native";
 
 export default function Home() {
@@ -21,31 +21,31 @@ export default function Home() {
         });
       }, [todos]);
 
-
-
     function Cadastro() {
         navigation.navigate('CadastroFilme')
     }
+
     function Exibir() {
         navigation.navigate('ExibiTodos')
     }
+
     function Pesquisa() {
         navigation.navigate('PesquisaFilme')
     }
 
     return (
         <View style={styles.container}>
-            <SafeAreaView>
-                <Text>Catalogo de filmes bons</Text>
-                <View>
-                    <Button title='Cadastro de filmes' onPress={() => Cadastro()}></Button>
-                </View>
-                <View>
-                    <Button title='Olhar catalogo' onPress={() => Exibir()}></Button>
-                </View>
-                <View>
-                    <Button title='Procurar filme expecifico' onPress={() => Pesquisa()}></Button>
-                </View>
+            <SafeAreaView style={styles.safeAreaView}>
+                <Text style={styles.title}>Catálogo de Filmes</Text>
+                <TouchableOpacity style={styles.button} onPress={() => Cadastro()}>
+                    <Text style={styles.buttonText}>Cadastrar Novo Filme</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => Exibir()}>
+                    <Text style={styles.buttonText}>Ver Todos os Filmes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => Pesquisa()}>
+                    <Text style={styles.buttonText}>Procurar Filme Específico</Text>
+                </TouchableOpacity>
             </SafeAreaView>
             <StatusBar style="auto" />
         </View>
@@ -54,9 +54,31 @@ export default function Home() {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#f5f5f5',
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+  
+    },
+    safeAreaView: {
+        width: '80%',
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 40,
+        textAlign: 'center',
+    },
+    button: {
+        backgroundColor: '#007bff',
+        paddingVertical: 15,
+        marginBottom: 20,
+        borderRadius: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        textAlign: 'center',
     },
 });

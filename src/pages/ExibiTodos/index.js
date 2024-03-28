@@ -59,7 +59,7 @@ export default function App() {
         );
     };
 
-    const handleEditPress = (nomeFilm, id,genero,clas) => {
+    const handleEditPress = (nomeFilm, id, genero, clas) => {
         setFilme(nomeFilm);
         setId(id);
         setGenero(genero);
@@ -68,28 +68,28 @@ export default function App() {
     };
     const salvarEdicao = () => {
         db.transaction(
-          tx => {
-            tx.executeSql(
-              'UPDATE filmes SET nome_filme = ?, classificacao = ?, genero = ? WHERE id = ?',
-              [filme, clas, genero, id],
-              (_, { rowsAffected }) => {
-                if (rowsAffected > 0) {
-                  atualizaRegistros();
-                  setModalVisible(false)
-                  Alert.alert('Sucesso', 'Filme editado com sucesso');
-                } else {
-                  Alert.alert('Erro', 'O filme que está sendo editado não foi encontrado');
-                }
-              },
-              (_, error) => {
-                console.error('Erro ao editar o filme:', error);
-                Alert.alert('Erro', 'Ocorreu um erro ao editar o filme');
-              }
-            );
-          }
+            tx => {
+                tx.executeSql(
+                    'UPDATE filmes SET nome_filme = ?, classificacao = ?, genero = ? WHERE id = ?',
+                    [filme, clas, genero, id],
+                    (_, { rowsAffected }) => {
+                        if (rowsAffected > 0) {
+                            atualizaRegistros();
+                            setModalVisible(false)
+                            Alert.alert('Sucesso', 'Filme editado com sucesso');
+                        } else {
+                            Alert.alert('Erro', 'O filme que está sendo editado não foi encontrado');
+                        }
+                    },
+                    (_, error) => {
+                        console.error('Erro ao editar o filme:', error);
+                        Alert.alert('Erro', 'Ocorreu um erro ao editar o filme');
+                    }
+                );
+            }
         );
-      };
-      
+    };
+
 
 
 
@@ -99,78 +99,83 @@ export default function App() {
                 <View style={styles.containerScroll}>
                     {todos.map(filmes => (
                         <View key={filmes.id} style={styles.filmeItem}>
-                            <Text>{filmes.id}</Text>
-                            <Text>{filmes.nome_filme}</Text>
-                            <Text>{filmes.genero}</Text>
-                            <Text>{filmes.classificacao}</Text>
-                            <Text>{filmes.data_cad}</Text>
-                            <TouchableOpacity onPress={() => {
-                                Alert.alert(
-                                    "Atenção!",
-                                    'Deseja excluir o registro selecionado?',
-                                    [
-                                        {
-                                            text: 'OK',
-                                            onPress: () => excluirFilme(filmes.id)
-                                        },
-                                        {
-                                            text: 'Cancelar',
-                                            onPress: () => { return },
-                                            style: 'cancel',
-                                        }
-                                    ],
-                                )
-                            }}>
-                                <FontAwesome6 name='trash-can' color={'red'} size={24} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleEditPress(filmes.nome_filme, filmes.id,filmes.genero,filmes.classificacao)}>
-                                <FontAwesome6 name='pen-to-square' color={'green'} size={24} />
-                            </TouchableOpacity>
+                            <Text style={styles.filmeItemText}>ID: {filmes.id}</Text>
+                            <Text style={styles.filmeItemText}>NOME: {filmes.nome_filme}</Text>
+                            <Text style={styles.filmeItemText}>GENERO: {filmes.genero}</Text>
+                            <Text style={styles.filmeItemText}>CLASSIFICAÇÂO: {filmes.classificacao}</Text>
+                            <Text style={styles.filmeItemText}>DATA CADASTRO: {filmes.data_cad}</Text>
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity onPress={() => {
+                                    Alert.alert(
+                                        "Atenção!",
+                                        'Deseja excluir o registro selecionado?',
+                                        [
+                                            {
+                                                text: 'OK',
+                                                onPress: () => excluirFilme(filmes.id)
+                                            },
+                                            {
+                                                text: 'Cancelar',
+                                                onPress: () => { return },
+                                                style: 'cancel',
+                                            }
+                                        ],
+                                    )
+                                }}>
+                                    <FontAwesome6 name='trash-can' color={'red'} size={24} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleEditPress(filmes.nome_filme, filmes.id, filmes.genero, filmes.classificacao)}>
+                                    <FontAwesome6 name='pen-to-square' color={'green'} size={24} />
+                                </TouchableOpacity>
 
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible}
-                                onRequestClose={() => {
-                                    setModalVisible(!modalVisible);
-                                }}
-                                // A propriedade onRequestClose do componente Modal do React Native é usada para especificar uma função que será chamada quando o usuário tentar fechar o modal, geralmente através do botão "Voltar" no Android ou ao tocar fora do modal.
-                            >
-                                <View style={styles.modalContainer}>
-                                    <View style={styles.modalContent}>
-                                        <Text>Editando Filme</Text>
-                                        <TextInput
-                                            style={styles.input}
-                                            value={filme}
-                                            onChangeText={setFilme}
-                                            placeholder="Nome do Filme"
-                                        />
-                                        <TextInput
-                                            style={styles.input}
-                                            value={clas}
-                                            onChangeText={setClas}
-                                            placeholder="Nome do Filme"
-                                        />
-                                        <TextInput
-                                            style={styles.input}
-                                            value={genero}
-                                            onChangeText={setGenero}
-                                            placeholder="Nome do Filme"
-                                        />
-                                        <Button title="Salvar" onPress={() => {
-                                            salvarEdicao()
-                                            setModalVisible(false);
-                                        }} />
-                                        <Button title="Cancelar" onPress={() => setModalVisible(false)} />
-                                    </View>
-                                </View>
-                            </Modal>
-
-
+                            </View>
                         </View>
                     ))}
                 </View>
             </ScrollView>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            // A propriedade onRequestClose do componente Modal do React Native é usada para especificar uma função que será chamada quando o usuário tentar fechar o modal, geralmente através do botão "Voltar" no Android ou ao tocar fora do modal.
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text>Editando Filme</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={filme}
+                            onChangeText={setFilme}
+                            placeholder="Nome do Filme"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={clas}
+                            onChangeText={setClas}
+                            placeholder="Nome do Filme"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={genero}
+                            onChangeText={setGenero}
+                            placeholder="Nome do Filme"
+                        />
+                        <View  style={styles.saveButton}>
+                            <Button title="Salvar" onPress={() => {
+                                salvarEdicao()
+                                setModalVisible(false);
+
+                            }} />
+                            <Button title="Cancelar" onPress={() => setModalVisible(false)} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+
 
             <StatusBar style="auto" />
         </View>
@@ -181,25 +186,65 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        padding: 20,
+    },
+    containerScroll: {
+        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    }, modalContainer: {
+    },
+    filmeItem: {
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#1a1a1a',
+        borderWidth: 2,
+        borderColor: 'red',
+        borderRadius: 20,
+        padding: 20,
+        marginBottom: 20,
+    },
+    filmeItemText: {
+        color: '#fff', // Cor do texto
+        fontSize: 18,
+    },
+    modalContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        backgroundColor: '#f9f9f9', 
-        borderRadius: 10,
+        backgroundColor: '#fff',
+        borderRadius: 20,
         padding: 20,
         width: '80%',
+        elevation: 5, // Sombra no Android
+        shadowColor: '#000', // Sombra no iOS
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.7,
+        shadowRadius: 5,
     },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-    }
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 20,
+        width: '100%',
+        backgroundColor: '#333',
+        color: '#fff',
+        fontSize: 16,
+    },
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '50%',
+    },
+    saveButton: {
+        gap: 10
+    },
 });
