@@ -151,7 +151,7 @@ export default function App() {
                         <Picker
                             selectedValue={genero}
                             style={styles.picker}
-                            onValueChange={(itemValue, itemIndex) =>
+                            onValueChange={(itemValue) =>
                                 setGenero(itemValue)
                             }>
                             <Picker.Item label="Selecione o Gênero" value="" />
@@ -163,7 +163,7 @@ export default function App() {
                         <Picker
                             selectedValue={clas}
                             style={styles.picker}
-                            onValueChange={(itemValue, itemIndex) =>
+                            onValueChange={(itemValue) =>
                                 setClas(itemValue)
                             }>
                             <Picker.Item label="Selecione a Classificação" value="" />
